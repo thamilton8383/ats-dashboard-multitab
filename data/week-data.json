@@ -1,0 +1,25 @@
+
+[
+  {
+    "week": 0,
+    "teams": "Florida State vs Georgia Tech",
+    "confidence": 86.7,
+    "suggested_bet": "ATS - FSU -7.5",
+    "chaos_risk": "Low",
+    "depth_gap": "Moderate",
+    "clv_edge": "+2.5 pts",
+    "tape_proxy": "Verified",
+    "blindspot_alert": true
+  },
+  {
+    "week": 1,
+    "teams": "Texas A&M vs Notre Dame",
+    "confidence": 91.3,
+    "suggested_bet": "ML - Texas A&M",
+    "chaos_risk": "Medium",
+    "depth_gap": "Low",
+    "clv_edge": "+1.0 pts",
+    "tape_proxy": "Unscouted QB",
+    "blindspot_alert": false
+  }
+]
