@@ -1,83 +1,160 @@
+// ats-dashboard-multitab/pages/index.js
 
-import { useState } from 'react';
-import data from '../data/week-data.json';
+import { useState } from "react";
+import Head from "next/head";
 
-const tabs = [
-  'Home',
-  'ROI Tracker',
-  'Parlay Generator',
-  'Player Rankings',
-  'Live Games',
-  'Win Totals',
-  'Model Logs'
+const TABS = [
+  "Home",
+  "ROI Tracker",
+  "Parlay Generator",
+  "Player Rankings",
+  "Live Games",
+  "Win Totals",
+  "Model Logs",
 ];
 
-const tagColor = (type, value) => {
-  const map = {
-    chaos_risk: { Low: 'green', Medium: 'orange', High: 'red' },
-    depth_gap: { Low: 'green', Moderate: 'orange', High: 'red' }
-  };
-  return map[type]?.[value] || 'gray';
-};
+const weekData = [
+  {
+    matchup: "Florida State vs Georgia Tech",
+    confidence: "86.7%",
+    bet: "ATS - FSU -7.5",
+    chaosRisk: "Low",
+    depthGap: "Moderate",
+    clvEdge: "+2.5 pts",
+    tapeProxy: "Verified",
+    blindspot: "✅ Yes",
+  },
+  {
+    matchup: "Texas A&M vs Notre Dame",
+    confidence: "91.3%",
+    bet: "ML - Texas A&M",
+    chaosRisk: "Medium",
+    depthGap: "Low",
+    clvEdge: "+1.0 pts",
+    tapeProxy: "Unscouted QB",
+    blindspot: "No",
+  },
+];
 
-export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState('Home');
+const testBets = [
+  {
+    game: "Florida State vs Georgia Tech",
+    bet: "ATS - FSU -7.5",
+    odds: "-110",
+    result: "Win",
+    clv: "+2.5",
+    confidence: "86.7%",
+    grade: "A",
+    source: "Model",
+  },
+  {
+    game: "Texas A&M vs Notre Dame",
+    bet: "ML - Texas A&M",
+    odds: "+120",
+    result: "Loss",
+    clv: "-0.5",
+    confidence: "91.3%",
+    grade: "C+",
+    source: "Model",
+  },
+  {
+    game: "Utah vs Houston",
+    bet: "Over 53.5",
+    odds: "-110",
+    result: "Win",
+    clv: "+1.0",
+    confidence: "79.1%",
+    grade: "B+",
+    source: "Manual",
+  },
+];
+
+export default function Home() {
+  const [activeTab, setActiveTab] = useState("Home");
+
+  const renderContent = () => {
+    if (activeTab === "Home") {
+      return (
+        <div className="space-y-6 mt-6">
+          {weekData.map((game, index) => (
+            <div key={index} className="bg-gray-800 text-white p-4 rounded-xl shadow-md">
+              <h2 className="text-xl font-bold text-blue-300 mb-2">{game.matchup}</h2>
+              <p><strong>Confidence:</strong> {game.confidence}</p>
+              <p><strong>Bet:</strong> {game.bet}</p>
+              <p><strong>Chaos Risk:</strong> {game.chaosRisk} | <strong>Depth Gap:</strong> {game.depthGap}</p>
+              <p><strong>CLV Edge:</strong> {game.clvEdge}</p>
+              <p><strong>Tape Proxy:</strong> {game.tapeProxy}</p>
+              <p><strong>Blindspot:</strong> {game.blindspot}</p>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (activeTab === "ROI Tracker") {
+      return (
+        <div className="mt-6 text-white">
+          <table className="w-full text-sm border border-gray-700">
+            <thead className="bg-gray-700 text-white">
+              <tr>
+                <th className="p-2">Game</th>
+                <th>Bet</th>
+                <th>Odds</th>
+                <th>Result</th>
+                <th>CLV</th>
+                <th>Confidence</th>
+                <th>Grade</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {testBets.map((bet, i) => (
+                <tr key={i} className="text-center border-t border-gray-600">
+                  <td className="p-1">{bet.game}</td>
+                  <td>{bet.bet}</td>
+                  <td>{bet.odds}</td>
+                  <td>{bet.result}</td>
+                  <td>{bet.clv}</td>
+                  <td>{bet.confidence}</td>
+                  <td>{bet.grade}</td>
+                  <td>{bet.source}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    return (
+      <div className="text-white mt-6 text-center">
+        <em>{activeTab} tab coming soon...</em>
+      </div>
+    );
+  };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', background: '#111', color: '#fff', minHeight: '100vh', padding: '1rem' }}>
-      <h1 style={{ textAlign: 'center', color: '#00e1ff' }}>ATS Dashboard</h1>
+    <div className="min-h-screen bg-gray-900 px-4 py-6">
+      <Head>
+        <title>ATS Dashboard</title>
+      </Head>
+      <h1 className="text-3xl font-bold text-center text-cyan-400 mb-4">ATS Dashboard</h1>
 
-      <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2rem' }}>
-        {tabs.map(tab => (
+      <div className="flex flex-wrap justify-center gap-2 mb-6">
+        {TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            style={{
-              padding: '0.5rem 1rem',
-              borderRadius: '20px',
-              border: 'none',
-              backgroundColor: activeTab === tab ? '#00e1ff' : '#333',
-              color: activeTab === tab ? '#000' : '#fff',
-              fontWeight: 'bold'
-            }}
+            className={`px-4 py-2 rounded-full text-sm font-medium shadow-md transition-colors duration-200 ${
+              activeTab === tab ? "bg-cyan-600 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            }`}
           >
             {tab}
           </button>
         ))}
       </div>
 
-      {activeTab === 'Home' && (
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          {data.map((game, idx) => (
-            <div key={idx} style={{
-              border: '1px solid #333',
-              padding: '1rem',
-              borderRadius: '8px',
-              backgroundColor: '#1c1c1c',
-              boxShadow: '0 0 10px rgba(0,0,0,0.5)'
-            }}>
-              <h2 style={{ color: '#00e1ff' }}>{game.teams}</h2>
-              <p><strong>Confidence:</strong> {game.confidence}%</p>
-              <p><strong>Bet:</strong> {game.suggested_bet}</p>
-              <p>
-                <strong>Chaos Risk:</strong>{' '}
-                <span style={{ color: tagColor('chaos_risk', game.chaos_risk) }}>{game.chaos_risk}</span> |
-                <strong> Depth Gap:</strong>{' '}
-                <span style={{ color: tagColor('depth_gap', game.depth_gap) }}>{game.depth_gap}</span>
-              </p>
-              <p><strong>CLV Edge:</strong> {game.clv_edge}</p>
-              <p><strong>Tape Proxy:</strong> {game.tape_proxy}</p>
-              <p><strong>Blindspot:</strong> {game.blindspot_alert ? '✅ Yes' : 'No'}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {activeTab !== 'Home' && (
-        <div style={{ textAlign: 'center', marginTop: '4rem', color: '#888' }}>
-          <p><em>{activeTab} tab coming soon...</em></p>
-        </div>
-      )}
+      {renderContent()}
     </div>
   );
 }
